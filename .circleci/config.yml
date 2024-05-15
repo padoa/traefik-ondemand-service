@@ -1,0 +1,15 @@
+version: 2.1
+
+orbs:
+  orb-ms: padoa/orb-ms@4.0.0
+
+workflows:
+  Build:
+    jobs:
+      - orb-ms/build:
+          name: Build
+          imageDirectory: "padoa-tools"
+          imageName: "traefik-ondemand-service"
+          context:
+            - REGISTRY
+            - PUSHGATEWAY
