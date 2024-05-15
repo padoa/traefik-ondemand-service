@@ -10,6 +10,7 @@ workflows:
           name: Build
           imageDirectory: "padoa-tools"
           imageName: "traefik-ondemand-service"
+          updateTsFiles: false
           context:
             - REGISTRY
             - PUSHGATEWAY
