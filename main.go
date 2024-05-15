@@ -119,8 +119,22 @@ func onDemand(scaler scaler.Scaler, store tinykv.KV[OnDemandRequestState]) func(
 
 		requestState, exists := store.Get(name)
 
-		// 1. Check against the current state
-		if !exists || requestState.State != "started" {
+		// If the state does not exist we assume that we need to start the service
+		// This avoid race condition
+		if !exists {
+			requestState = OnDemandRequestState{
+				State: "starting",
+				Name:  name,
+			}
+			err := scaler.ScaleUp(name)
+
+			if err != nil {
+				ServeHTTPInternalError(rw, err)
+				return
+			}
+			// If the it is not started, it must be starting
+			// So we check if it is up and if not we trigger a scale up
+		} else if requestState.State != "started" {
 			if scaler.IsUp(name) {
 				requestState = OnDemandRequestState{
 					State: "started",
