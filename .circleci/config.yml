@@ -11,6 +11,7 @@ workflows:
           imageDirectory: "padoa-tools"
           imageName: "traefik-ondemand-service"
           updateTsFiles: false
+          mainBranch: "we-dont-have-ci-tools-here-forget-it"
           context:
             - REGISTRY
             - PUSHGATEWAY
